@@ -1,0 +1,63 @@
+---
+title: "Correlation and Autocorrelation of the Assets"
+output: 
+  pdf_document: 
+    keep_tex: yes
+---
+
+This code here will help us calculate the correlations and autocorrelations of the assets and also the main comparison of returns between the assets and absloute returns.
+
+```{r}
+#loading libraries
+suppressMessages(library(quantmod))
+suppressMessages(library(PerformanceAnalytics))
+library(ggplot2)
+suppressMessages(library(timeSeries))
+suppressMessages(library(zoo))
+#defining the trading period
+Start= "2014-01-01"
+End = "2018-01-01"
+#defining our stocks
+stocks = c("DIS","BABA","JNJ","FB")
+#pulling requests using quantmod
+suppressMessages(getSymbols(stocks,from=Start, to = End))
+#picking only the adjusted prices which is what we need
+Portprices = na.omit(merge(Ad(DIS),Ad(BABA),Ad(JNJ),Ad(FB))) 
+names(Portprices) <- c("DIS","BABA","JNJ","FB")
+Portprices<-as.zoo(Portprices)
+plot(Portprices , xlab = " " , main = " " )
+#Daily portfolio returns of our data
+Portreturns = diff(log(Portprices))*100 
+colnames(Portreturns) = c("DIS","BABA","JNJ","FB")
+#changing the dates according to the time
+Portdates <- as.POSIXct(index(Portreturns))
+#changing the data to a timeseries data
+Portreturns <- as.timeSeries(Portreturns)
+Portret <- timeSeries(Portreturns,charvec = Portdates)
+plot( Portret , xlab = "Dates" , main = "Percentage Returns of the portfolio" )
+layout ( matrix ( 1 : 6 , nrow = 3, ncol = 2 , byrow = TRUE) )
+ccf ( as.vector(Portret[,1]) ,as.vector(Portret[,2]),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = " Returns DIS vs BABA" )
+ccf ( as.vector(Portret[,1]) ,as.vector(Portret[,3]),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = " Returns DIS vs JNJ" )
+ccf ( as.vector(Portret[,1]) ,as.vector(Portret[,4]),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = " Returns DIS vs FB" )
+ccf ( as.vector(Portret[,2]) ,as.vector(Portret[,3]),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = " Returns BABA vs JNJ" )
+ccf ( as.vector(Portret[,2]) ,as.vector(Portret[,4]),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = " Returns BABA vs FB" )
+ccf ( as.vector(Portret[,3]) ,as.vector(Portret[,4]),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = " Returns JNJ vs FB" )
+ccf ( as.vector(abs(Portret[,1])) ,as.vector(abs(Portret[,2])),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = "Absolute Returns DIS vs BABA" )
+ccf ( as.vector(abs(Portret[,1])) ,as.vector(abs(Portret[,])),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = "Absolute Returns DIS vs JNJ" )
+ccf ( as.vector(abs(Portret[,1])) ,as.vector(abs(Portret[,4])),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = "Absolute Returns DIS vs FB" )
+ccf ( as.vector(abs(Portret[,2])) ,as.vector(abs(Portret[,3])),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = "Absolute Returns BABA vs JNJ" )
+ccf ( as.vector(abs(Portret[,2])) ,as.vector(abs(Portret[,4])),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = "Absolute Returns BABA vs FB")
+ccf ( as.vector(abs(Portret[,3])) ,as.vector(abs(Portret[,4])),
+      ylab = " " , xlab = " " ,lag.max = 20 , main = "Absolute Returns JNJ vs FB" )
+```
