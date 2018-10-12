@@ -1,0 +1,527 @@
+---
+title: "Markowitz_Research_Me"
+date: "24 July 2018"
+output: 
+  pdf_document: 
+    keep_tex: yes
+---
+
+# PART 1
+
+In this part, we are going to study the Markowitz model using normal calculations or direct calculations
+
+## Markowitz Problem with 4 stocks
+
+The following data shows historical adjusted closing prices for 5 stocks for the trading period of January 2017 to January 2018.
+
+
+### Loading the required packages
+
+```{r}
+suppressMessages(library(quantmod))
+suppressMessages(library(PerformanceAnalytics))
+suppressMessages(suppressWarnings(library(timeSeries)))
+suppressMessages(suppressWarnings(library(fPortfolio)))
+suppressMessages(suppressWarnings(library(caTools)))
+suppressMessages(library(dplyr))
+suppressMessages(library(ggplot2))
+suppressMessages(library(ggcorrplot))
+suppressMessages(suppressWarnings(library(psych)))
+```
+
+### Obtaining the data and plot
+
+```{r}
+begin = "2014-01-01"
+end = "2018-01-01"
+stocks = c("DIS","BABA","JNJ","FB")
+suppressMessages(getSymbols(stocks,from=begin, to = end))
+prices = na.omit(merge(Ad(DIS),Ad(BABA),Ad(JNJ),Ad(FB))) 
+names(prices) <- c("DIS","BABA","JNJ","FB")
+write.csv(prices,file = "Prices_of_4_stocks.csv")
+prices_matrix <- as.matrix(prices)
+m = dim(prices_matrix)
+#Plot of the price developments of the above data
+ggplot(prices, aes(x = index(prices))) +
+  geom_line(aes(y = prices$DIS,color = "DIS")) + 
+  ggtitle("Historical Price Developments of the stocks") +
+  geom_line(aes(y = prices$BABA, color = "BABA")) + 
+  geom_line(aes(y = prices$JNJ, color = "JNJ")) +
+  geom_line(aes(y = prices$FB, color = "FB")) +
+  xlab("Dates") + ylab("Adjusted Prices") +
+  theme(plot.title = element_text(hjust = 0.5), panel.border = element_blank()) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_colour_manual("Series",values=c("DIS"="gray40","BABA"="firebrick4",
+                                        "FB"="blue","JNJ"="#76176b"))
+head(prices,10)
+```
+
+### Corrplot for 2014-2016
+
+```{r}
+begin1 = "2014-01-01"
+end1 = "2016-01-01"
+stocks = c("DIS","BABA","JNJ","FB")
+suppressMessages(getSymbols(stocks,from=begin1, to = end1))
+prices1 = na.omit(merge(Ad(DIS),Ad(BABA),Ad(JNJ),Ad(FB)))
+names(prices1) <- c("DIS","BABA","JNJ","FB")
+prices1<- as.matrix(prices1)
+Xi1 = 365*diff(log(prices1))
+corr1 <- round(cor(Xi1), 3)
+head(corr1[, 1:4])
+ggcorrplot(corr1,lab = TRUE)
+```
+
+### Corrplot for 2016-2018
+
+```{r}
+begin2 = "2016-01-01"
+end2 = "2018-01-01"
+stocks = c("DIS","BABA","JNJ","FB")
+suppressMessages(getSymbols(stocks,from=begin2, to = end2))
+prices2 = na.omit(merge(Ad(DIS),Ad(BABA),Ad(JNJ),Ad(FB))) 
+names(prices2) <- c("DIS","BABA","JNJ","FB")
+prices2<- as.matrix(prices2)
+Xi2 = 365*diff(log(prices2))
+corr2 <- round(cor(Xi2), 3)
+head(corr2[, 1:4])
+ggcorrplot(corr2,lab = TRUE)
+```
+
+
+### Matrix plot for scaled prices for the data
+
+```{r}
+#Scaled prices
+prices.scaled = prices_matrix
+m = dim(prices_matrix)
+for (k in (1:m[2])){
+  prices.scaled[,k] = prices.scaled[,k]/prices.scaled[1,k]
+}
+
+matplot(prices.scaled,type='l',xaxt="n",lwd =1,
+        col=1:m[2],xlab="Dates",ylab="Scaled Prices")
+#axis(side=1, at=index(prices.scaled)) 
+legend("topleft", stocks, col=1:m[2],lwd=1)
+```
+
+
+### Matrix of annualized returns,skewness and kurtosis
+
+```{r}
+#Matrix of Annualized Returns
+Xi = 365*diff(log(prices_matrix))
+#round(Xi*100,2) #Annualized returns in percentages
+# skewness and kurtosis from the package psych
+skew(Xi)
+kurtosi(Xi)
+```
+
+### Expected annualied returns and variance(biased and unbiased)
+
+```{r}
+dim_xi = dim(Xi)
+n = dim_xi[1]
+j = dim_xi[2]
+#first moment: expected annulized returns 
+returns = colMeans(Xi)
+returns
+apply(X=Xi, MARGIN=2,FUN = mean)*100
+#Second moment : variance 
+(apply(X=Xi, MARGIN = 2, FUN = var)) #biased 
+(apply(X=Xi, MARGIN = 2, FUN = var) * (n-1)/n)*100 #unbiased
+```
+
+### Covariance matrix
+
+From below, we should note that the covariance matrix is symmetric and is also positive definite. Also, the diagonal of the covariance matrix are the variances of the stocks. And since it is symmetric, then also the covariance matrix is also invertible.
+
+```{r}
+cov(Xi)
+diag(cov(Xi))*100 #biased
+```
+
+```{r}
+(cov(Xi)*(n-1)/n)
+diag(cov(Xi)*(n-1)/n) #unbiased
+```
+
+## CAPM solution.
+
+### Covariance Matrix
+
+```{r}
+Covar = cov(Xi)*(n-1)/n
+inv_C = solve(Covar)
+Covar
+```
+
+
+### Correlation of the assets
+
+```{r}
+corr <- round(cor(Xi), 3)
+head(corr[, 1:4])
+ggcorrplot(corr,lab = TRUE)
+```
+
+
+### Inverse of the covariance matrix
+
+Generally, we know that the inverse of a positive definite symmetric matrix is also symmetric. Clearly, the inverse of the covariance matrix below is alo symmetric.
+
+```{r}
+round(inv_C,2)
+round(inv_C*100,2)
+```
+
+### A,B,C and D values
+
+```{r}
+ones = rep(1,j)
+A = as.numeric(returns%*% inv_C %*% returns)
+B = as.numeric(returns%*% inv_C %*% ones )
+C = as.numeric(ones %*% inv_C %*% ones )
+D = A*C-B*B
+first <- C/D * inv_C %*% returns
+first2 <- B/D * inv_C %*% returns
+first3 <- A/D * inv_C %*% ones
+first4 <- B/D * inv_C %*% ones
+first - first4
+first3 - first2
+```
+
+### Efficient Markowitz portfolio
+
+```{r}
+mu = seq(from=0.00,to = 0.3,by=0.01)
+ml = length(mu)
+xm = matrix(nrow = j, ncol=ml)
+for (k in 1:ml){
+  xm[,k]= A*inv_C%*%ones- B*inv_C%*%returns+ mu[k]*(C*inv_C%*%returns -B*inv_C%*%ones) 
+}
+xm = xm/D
+colSums(xm)
+```
+
+we know that $\text{standard deviation} = \sqrt{\frac{\mu^2 * c - 2* \mu *b + a}{d}}$ where $d = a*c - b^2$ and so we can see the relationship between standard deviation and returns for our data in the following figure:
+
+
+```{r}
+standarddev = sqrt((mu*mu*C-2*mu*B+A)/D)
+var = mu*mu*C-2*mu*B+A/D
+min_mu = B/C #minimum expected return
+min_var = sqrt(1/C) #minimum standard dviation
+sharpeRatio = min_mu/min_var # sharpe ratio
+Expe_port = sharpeRatio*standarddev # portfolio returns for CML
+plot(mu,standarddev,type="l",main="Standard deviation of the optimal portfolio in dependence of mu")
+plot(standarddev,mu,type = "l", main = "Efficient frontier")
+points(min_var,min_mu,pch = 8, col = "red",cex = 1)
+text(3.5,min_mu,expression("Min variance point, mu = 0.1605,var = 2.9124"))
+```
+
+The portfolio with the smallest variance from our combinations is given by $\mu = \frac{b}{c} = 0.1604767 = 16.05\%$ which is clear from the diagram and the corresponding standard deviation is given by $\sigma= \sqrt{\frac{1}{C}} = 2.912357 = 291.24\%$.
+
+### Asset allocation figure.
+
+```{r}
+matplot(mu,t(xm),type='l',col=1:j,lty=1:j,ylab="x*",main="Asset Allocation")
+legend("topright", stocks,col=1:j, lty=1:j,bty="n",lwd=1)
+```
+
+### Combined asset allocation and standard deviation
+
+```{r}
+plot(mu,t(xm[1,]),ylim=c(-0.5,1.5),type='l',col=1,lty=1,ylab="x* asset allocation")
+for (k in 2:j) lines(mu,t(xm[k,]),type='l',col=k,lty=k)
+par(new=TRUE)
+plot(mu, standarddev,type="l",col="darkgray",lwd=3,lty=6,xaxt="n",yaxt="n",xlab="",ylab="")
+axis(4)
+mtext("sd(x*(mu))",side=4,line=3,col="darkgray")
+legend("topleft", c(stocks), col=c(1:j), lty=1:(j),bty="n",lwd=rep(1,j))
+```
+
+
+## PART 2
+
+We are going to use the package **fPortfolio** in this part to study the Markowitz model.
+
+### Makowitz model using fPortfolio package and others
+
+I will be using the package "fPortfolio" to study the Markowitz model. This package is specifically geared towards portfolio optimization.
+
+In order to construct a minimum variance portfolio, we will need 3 things:
+
+  * Historical Returns
+  * Historical volatility
+  * Covariance matrix and correlation matrix
+
+We are going to consider the following 4 stocks during the period of 2010-01-01 to 2018-01-01:
+
+  + DIS
+  + BABA
+  + JNJ
+  + FB
+
+### Obtaining data using the quantmod package
+
+We will also be creating a time series object to allow us plot the Efficient frontier. We will use the "**getSymbols**" function from __quantmod__ to be able to gather the prices for the stocks which we will use to calculate returns and convert the data into a time series object.
+
+```{r}
+tickers <- c("DIS", "BABA", "JNJ", "FB")
+#Calculate Returns: Daily
+portfolioPrices <- NULL
+for (Ticker in tickers)
+  portfolioPrices <- cbind(portfolioPrices,
+                           suppressMessages(getSymbols(Ticker,from="2014-01-01",
+                                      to="2018-01-01",auto.assign=FALSE)[,4]))
+portfolioPrices <- portfolioPrices[apply(portfolioPrices,1,function(x) all(!is.na(x))),]
+colnames(portfolioPrices) <- tickers
+#Calculate Returns: Daily RoC
+portfolioReturns <- na.omit(ROC(portfolioPrices, type="discrete"))*365
+colnames(portfolioReturns) <- tickers
+#Plot of the returns developments of the above data
+ggplot(portfolioReturns, aes(x = index(portfolioReturns))) +
+  geom_line(aes(y = portfolioReturns$DIS,color = "DIS")) + 
+  ggtitle("Historical portfolio returns Developments of the stocks") +
+  geom_line(aes(y = portfolioReturns$BABA, color = "BABA")) + 
+  geom_line(aes(y = portfolioReturns$JNJ, color = "JNJ")) +
+  geom_line(aes(y = portfolioReturns$FB, color = "FB")) +
+  xlab("Dates") + ylab("Adjusted Prices") +
+  theme(plot.title = element_text(hjust = 0.5), panel.border = element_blank()) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_colour_manual("Stocks",values=c("DIS"="#FF0000","BABA"="#00FF00",
+                                        "JNJ"="#0000FF","FB"="#454545"))
+plot.zoo(portfolioReturns,col = 1:4)
+portfolioReturns <- as.timeSeries(portfolioReturns)
+#Checking on the dimension of the portfolio prices
+dim(portfolioPrices)
+dim(portfolioReturns)
+head(portfolioPrices)
+head(portfolioReturns)
+#Plot of the price developments of the above data
+ggplot(portfolioPrices, aes(x = index(portfolioPrices))) +
+  geom_line(aes(y = portfolioPrices$DIS,color = "DIS")) + 
+  ggtitle("Historical Price Developments of the stocks") +
+  geom_line(aes(y = portfolioPrices$BABA, color = "BABA")) + 
+  geom_line(aes(y = portfolioPrices$JNJ, color = "JNJ")) +
+  geom_line(aes(y = portfolioPrices$FB, color = "FB")) +
+  xlab("Dates") + ylab("Adjusted Prices") +
+  theme(plot.title = element_text(hjust = 0.5), panel.border = element_blank()) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_colour_manual("Stocks",values=c("DIS"="#FF0000","BABA"="#00FF00",
+                                        "JNJ"="#0000FF","FB"="#454545"))
+```
+
+### Portfolio frontier calculation
+
+I will now calculate and plot the efficient frontier by using the function " __portfolioFrontier__". I will also output the covariance matrix and correlation matrix for our portfolio of assets. We can also extract certain portfolios sucsh as the Minimun Variance Portfolio or Maximum Return Portfolio.
+
+We will also examine the weights of each point on the frontier graphically.
+We will also annualize the data and plot the risk returns on a scatter plot also. Also, we will plot the Sharpe Ratio of each point on the frontier on a scatter graph.
+
+We will also see the Value-at-risk and conditional value-at-risk of the portfolio returns at different levels
+
+```{r}
+# calculate the efficient frontier
+effFrontier <- portfolioFrontier(portfolioReturns,
+                                 constraints = "LongOnly")
+plot(effFrontier,c(1,2,3,4))
+plot(effFrontier,c(1,2))
+plot(effFrontier,c(1,8))
+#Plot Frontier Weights (Can Adjust Number of Points)
+#get allocations for each instrument for each point on the efficient frontier
+frontierWeights <- getWeights(effFrontier) 
+colnames(frontierWeights) <- tickers
+risk_return <- frontierPoints(effFrontier)
+write.csv(risk_return, "risk_return.csv")
+
+#Output Correlation
+cor_matrix <- cor(portfolioReturns)
+cov_matrix <- cov(portfolioReturns)
+write.csv(cov_matrix, "covmatrix.csv")
+cov_matrix
+#Annualize Data
+#get risk and return values for points on the efficient frontier
+riskReturnPoints <- frontierPoints(effFrontier) 
+annualizedPoints <- data.frame(targetRisk=riskReturnPoints[, "targetRisk"]*sqrt(365),
+                               targetReturn=riskReturnPoints[,"targetReturn"]*365)
+plot(annualizedPoints)
+# plot Sharpe ratios for each point on the efficient frontier
+riskFreeRate <- 0
+plot((annualizedPoints[,"targetReturn"]-riskFreeRate) / annualizedPoints[,"targetRisk"],
+     xlab="point on efficient frontier", ylab="Sharpe ratio")
+#Plot Frontier Weights (Need to transpose matrix first)
+barplot(t(frontierWeights), main="Frontier Weights", 
+        col=cm.colors(ncol(frontierWeights)+2), 
+        legend=colnames(frontierWeights))
+#Get Minimum Variance Port, Tangency Port, etc.
+#mvp = minimum variance portfolio
+mvp <- minvariancePortfolio(portfolioReturns,
+                            spec=portfolioSpec(), constraints="LongOnly")
+mvp
+tangencyPort <- tangencyPortfolio(portfolioReturns,
+                                  spec=portfolioSpec(),constraints="LongOnly")
+tangencyPort
+mvpweights <- getWeights(mvp) #mininum variance portfolio weights
+tangencyweights <- getWeights(tangencyPort) #tangency portfolio weights
+#ggplot of MVP Weights
+df <- data.frame(mvpweights)
+assets <- colnames(frontierWeights)
+ggplot(data=df, aes(x=assets, y=mvpweights, fill=assets)) +
+  geom_bar(stat="identity", position=position_dodge(),colour="black") +
+  geom_text(aes(label=sprintf("%.02f %%",mvpweights*100)),
+            position=position_dodge(width=0.9), vjust=-0.25, check_overlap = TRUE) +
+              ggtitle("Minimum Variance Portfolio Optimal Weights")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x= "Assets", y = "Weights (%)")
+#ggplot of tangency portfolio weights 
+dft <- data.frame(tangencyweights)
+assets <- colnames(frontierWeights)
+ggplot(data=dft, aes(x=assets, y=tangencyweights, fill=assets)) +
+  geom_bar(stat="identity", position=position_dodge(),colour="black") +
+  geom_text(aes(label=sprintf("%.02f %%",tangencyweights*100)),
+            position=position_dodge(width=0.9), vjust=-0.25, check_overlap = TRUE) +
+  ggtitle("Tangency Portfolio Weights")+ theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x= "Assets", y = "Weights (%)")
+```
+
+
+### Note:
+  
+  * The function **portfolioFrontier** calculates the whole efficient frontier. The portfolio information consists of five arguments: data, specifications, constraints, title and description. Tha range of the frontier is determined from the range of asset returns, and the number of equidistant points in the returns, is calculated from the number of frontier points hold in the specification structure.
+
+  * An efficient portfolio ia a portfolio which lies on the efficient frontier. The **efficientPortfolio** function returns the properties of the efficient portfolio.
+  * The function **tangencyPortfolio** returns the portfolio with the highest return/risk ratio on the efficient frontier. For the Markowitz, this is the same as the Share Ratio. To find this point on the frontier thr return/risk ratio calculated from the target return and target risk returned by the function **efficientPortfolio**.
+  * The function **minvariancePortfolio** returns the portfolio with the minimal risk on the efficient frontier. To find the minimal risk point, the target risk returned by the function **efficientPortfolio** is minimized.
+  * The function **maxreturnPortfolio** returns the portfolio with the maximal return for a fixed target risk.
+
+
+You will realize that we have multiplied the daily returns by 252 and multiplied the deviation by square root of 252. The reason is that the Sharpe Ratio is typically defined in terms of annual return and annual deviation. As everyone has said, you go from daily returns to annual returns by assuming daily returns are independent and identically distributed.
+
+With that assumption, you get annual return by multiplying by daily return by 252 (compounding makes little difference when daily return is 1 ). You get annual deviation by multiplying daily deviation by square root of 252
+
+## Examining the portfolio with constraints
+
+### Portfolio with Short selling allowed
+
+We will now examine the portfolio having some constraints and specifications. We will alow shortselling in this portfolio and set the minimum and maximimum weight in one given asset throughout the entire list of tickers.
+
+```{r}
+#Set Specs
+Spec = portfolioSpec()
+setSolver(Spec) = "solveRshortExact" #set the solver to use
+setTargetRisk(Spec) = .12 #set the target risk level.
+constraints <- c("minW[1:length(tickers)]=-1","maxW[1:length(tickers)]=.60", "Short")
+ 
+effFrontierShort <- portfolioFrontier(portfolioReturns, Spec, constraints = constraints)
+weights <- getWeights(effFrontierShort)
+write.csv(weights, "weightsShort.csv")
+colnames(weights) <- tickers
+#Plot the efficient frontier with minimun variance portfolio and tangency portfolio.
+plot(effFrontierShort, c(1, 2, 3,4))
+#Plot Frontier Weights (Need to transpose matrix first)
+barplot(t(weights), main="Frontier Weights", 
+        col=cm.colors(ncol(weights)+2), legend=colnames(weights))
+ 
+effPortShort <- minvariancePortfolio(portfolioReturns, Spec, constraints=constraints)
+optWeights <- getWeights(effPortShort)
+tanPortShort <- tangencyPortfolio(portfolioReturns, Spec, constraints=constraints)
+tanWeights <- getWeights(tanPortShort)
+#maxR <- maxreturnPortfolio(portfolioReturns , Spec, constraints=constraints)
+#maxWeights <- getWeights(maxR)
+ 
+#ggplot MVP Weights
+df <- data.frame(tanWeights)
+assets <- colnames(frontierWeights)
+ggplot(data=df, aes(x=assets, y=tanWeights, fill=assets)) +
+  geom_bar(stat="identity", position=position_dodge(),colour="black") +
+  geom_text(aes(label=sprintf("%.02f %%",tanWeights*100)),
+            position=position_dodge(width=0.9), vjust=-0.25, check_overlap = TRUE) +
+  ggtitle("Tangency Portfolio With Shorts Allowed")+ 
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x= "Assets", y = "Weight (%)")
+```
+
+## Markowitz model with a risk free asset
+
+### function to create asset allocation
+
+```{r}
+graph.asset.allocation = function(portfolio,sd,mu, png.name="optimal-asset-allocation-mu.png",title="Markowitz: asset allocation"){
+  nr = dim(portfolio)[1]
+  titles = row.names(portfolio)
+  #print(portfolio)
+  #print(titles)
+
+  par(mar=c(5,4,4,5)+.1)
+  plot(mu,t(portfolio[1,]),ylim=c(min(portfolio),max(portfolio)),type='l',col=1,lty=1,ylab="x* asset allocation")
+  for (j in 2:nr) lines(mu,t(portfolio[j,]),type='l',col=j,lty=j)
+  par(new=TRUE)
+  plot(mu, sd,type="l",col="darkgray",lwd=3,lty=6,xaxt="n",yaxt="n",xlab="",ylab="")
+  axis(4)
+  mtext("sd(x*(mu))",side=4,line=3,col="darkgray")
+  legend("topleft", c(titles), col=c(1:nr), lty=1:nr,bty="n",lwd=rep(1,nr)) 
+}
+```
+
+
+
+```{r}
+markowitz.portfolio.cash = function(mu.ret, Cov.Matrix=diag(length(mu.ret)), mu.portfolio.min = 0, r0=0){
+  if (missing(mu.ret)) stop("need vector of expected asset returns: mu.ret")
+  titles= names(mu.ret)
+  
+  nr = length(mu.ret)
+  if (sum(dim(Cov.Matrix)==nr)<2) stop("wrong dimensions")
+  ones = rep(1,nr)
+  Cov.inv = solve(Cov.Matrix)
+  
+  m = length(mu.portfolio.min)
+  xm.r0 = matrix(nrow = nr+1, ncol=m)
+  #first nr compontens usual assets x^star, nr+1 = cash(r0) x0^star
+  
+  a = as.numeric(mu.ret%*% Cov.inv %*% mu.ret)
+  b = as.numeric(mu.ret%*% Cov.inv %*% ones )
+  c = as.numeric(ones %*% Cov.inv %*% ones )
+  d = a-2*b*r0+c*r0*r0
+  
+  for (k in 1:m){
+    xm.r0[,k] = c((mu.portfolio.min[k]-r0)*(Cov.inv%*%mu.ret - r0 * Cov.inv%*%ones),d-(b-r0*c)*(mu.portfolio.min[k]-r0)) 
+  }
+  
+  if (length(titles)==0) titles=paste(rep("asset",nr),1:nr)
+  print(titles)
+  row.names(xm.r0) = c(titles,"cash")
+  standarddev = sqrt(((mu.portfolio.min-r0)^2/d))  
+  return.list = list(xm.r0/d,standarddev)
+  names(return.list) = c("efficient_portfolio","standarddev")
+  return(return.list)
+}
+
+r0 = 0.02
+
+mu.new = seq(from=0.0, by=0.01, to=0.84)
+
+portfolio.riskfree = markowitz.portfolio.cash(returns,Covar,mu.new,r0)
+colSums(portfolio.riskfree$efficient_portfolio)
+
+graph.asset.allocation(portfolio=portfolio.riskfree$efficient_portfolio,sd=portfolio.riskfree$standarddev, 
+                       mu=mu.new)
+```
+
+#### numerical solution for our problem with risk free asset
+
+```{r}
+(mu.ret <- returns)
+r0 = 0.02
+(a = as.numeric(mu.ret%*% inv_C %*% mu.ret))
+(b = as.numeric(mu.ret%*% inv_C %*% ones ))
+(c = as.numeric(ones %*% inv_C %*% ones ))
+(d = a-2*b*r0+c*r0*r0)
+(mu_0 = (a - b*r0)/(b-c*r0))
+denominator <- r0 - mu_0
+sol_risky <- (1/(b-r0*c))*((inv_C %*% returns) - (r0 * inv_C %*% ones))
+sol_risky
+```
+
