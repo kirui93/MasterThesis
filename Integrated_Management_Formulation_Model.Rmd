@@ -1,5 +1,5 @@
 ---
-title: "Project2"
+title: "Integrated Management Formulation Model"
 author: "Kirui Kipngeno"
 date: "October 19, 2018"
 output: 
@@ -651,6 +651,10 @@ for (alp in alpha){
                       values =c("fb"="#0000FF","jnj"="#00FF00","baba"="#FF0000","dis"="#454545","bond"="violet"))
 ```
 
+
+The formation of the models almost resembles each other in the different levels of $\gamma$ and that is why in the different levels of $\gamma$, the programs almost resembles each other. Throughout the different levels of $\gamma$, what doesn't change is the **Amat** matrix and so you realize that we use the same Amat matrix throughout the programs for the different levels of $\gamma$.
+
+In the following, we want to just show the relationship between AV@R and V@R using a standard normally distributed data with mean = 0 and standard deviation = 1, It isn't part of this Integrated Management Formulation model but it is just part of the prperties of AV@R as always been greater than the V@R at all levels of $\alpha$.
 
 ### Relationship between the Average Value-at-Risk and Value-at-Risk
 
