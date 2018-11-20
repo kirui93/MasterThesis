@@ -101,7 +101,6 @@ for (k in (1:m[2])){
 
 matplot(prices.scaled,type='l',xaxt="n",lwd =1,
         col=1:m[2],xlab="Dates",ylab="Scaled Prices")
-#axis(side=1, at=index(prices.scaled)) 
 legend("topleft", stocks, col=1:m[2],lwd=1)
 ```
 
@@ -139,9 +138,6 @@ From below, we should note that the covariance matrix is symmetric and is also p
 ```{r}
 cov(Xi)
 diag(cov(Xi))*100 #biased
-```
-
-```{r}
 (cov(Xi)*(n-1)/n)
 diag(cov(Xi)*(n-1)/n) #unbiased
 ```
