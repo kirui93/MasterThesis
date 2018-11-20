@@ -56,6 +56,15 @@ ggplot(prices, aes(x = index(prices))) +
 head(prices,10)
 ```
 
+### Chart series for the stocks
+
+```{r}
+chartSeries(BABA)
+chartSeries(FB)
+chartSeries(DIS)
+chartSeries(JNJ)
+```
+
 ### Corrplot for 2014-2016
 
 ```{r}
