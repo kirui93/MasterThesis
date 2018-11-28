@@ -27,6 +27,7 @@ suppressMessages(library(dplyr))
 suppressMessages(library(ggplot2))
 suppressMessages(library(ggcorrplot))
 suppressMessages(suppressWarnings(library(psych)))
+library(dygraphs)
 ```
 
 ### Obtaining the data and plot
@@ -38,7 +39,12 @@ stocks = c("DIS","BABA","JNJ","FB")
 suppressMessages(getSymbols(stocks,from=begin, to = end))
 prices = na.omit(merge(Ad(DIS),Ad(BABA),Ad(JNJ),Ad(FB))) 
 names(prices) <- c("DIS","BABA","JNJ","FB")
-write.csv(prices,file = "Prices_of_4_stocks.csv")
+#plot dygraph from package dygraphs
+dygraph(prices,main = "Prices of stocks",xlab = "Dates",ylab = "Prices")
+# basic time series plot with range slider underneath
+dygraph(prices) %>% dyRangeSelector()
+#write the prices to a csv file in your computer
+write.zoo(prices,file = "Prices_of_4_stocks.csv", index.name = "Dates", sep = ",")
 prices_matrix <- as.matrix(prices)
 m = dim(prices_matrix)
 #Plot of the price developments of the above data
@@ -168,6 +174,9 @@ Covar
 corr <- round(cor(Xi), 3)
 head(corr[, 1:4])
 ggcorrplot(corr,lab = TRUE)
+
+# correlation chart
+chart.Correlation(Xi)
 ```
 
 
