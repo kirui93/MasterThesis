@@ -241,6 +241,11 @@ The portfolio with the smallest variance from our combinations is given by $\mu 
 ```{r}
 matplot(mu,t(xm),type='l',col=1:j,lty=1:j,ylab="x*",main="Asset Allocation")
 legend("topright", stocks,col=1:j, lty=1:j,bty="n",lwd=1)
+# Or we can plot a stacked barplot which will appear a bit better than above
+library(reshape2)
+asset_alloc <- melt(asset_alloc, id = "mu")
+names(asset_alloc) <- c("mu","Stocks","Allocation")
+ggplot() + geom_bar(aes(y = Allocation, x = mu, fill = Stocks), data = asset_alloc, stat="identity") 
 ```
 
 ### Combined asset allocation and standard deviation
