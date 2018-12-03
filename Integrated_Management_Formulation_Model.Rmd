@@ -183,6 +183,7 @@ ggplot(result1, aes(x=result1$alpha)) +
 # Using stacked barplots 
 library(reshape2)
 data1 <- result1
+names(data1) <- c("alpha","DIS","BABA","JNJ","FB")
 mdata <- melt(data1, id=c("alpha"))
 names(mdata) <- c("Alpha","Stocks","Allocation")
 ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata, stat="identity") 
@@ -492,6 +493,13 @@ for (alp in alpha){
     labs(title="Asset allocation for gamma = 0.1") +  # title and caption
     scale_fill_manual("Stocks",
                       values =c("fb"="#0000FF","jnj"="#00FF00","baba"="#FF0000","dis"="#454545","bond"="violet"))
+# Using stacked barplots 
+library(reshape2)
+data1 <- resultfree1
+names(data1) <- c("alpha","DIS","BABA","JNJ","FB")
+mdata <- melt(data1, id=c("alpha"))
+names(mdata) <- c("Alpha","Stocks","Allocation")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata, stat="identity") 
 ```
 
 ## Solving and asset allocation for $\gamma$free = 0.3
