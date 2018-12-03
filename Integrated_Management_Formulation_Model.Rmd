@@ -180,6 +180,12 @@ ggplot(result1, aes(x=result1$alpha)) +
   labs(title="Area plot for results when gamma = 0.1") +
   scale_fill_manual("Stocks",values =
                       c("fb"="#0000FF","jnj"="#00FF00","baba"="#FF0000","dis"="#454545"))
+# Using stacked barplots 
+library(reshape2)
+data1 <- result1
+mdata <- melt(data1, id=c("alpha"))
+names(mdata) <- c("Alpha","Stocks","Allocation")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata, stat="identity") 
 ```
 
 ### With gamma=0
