@@ -527,6 +527,13 @@ colSums(portfolio.riskfree$efficient_portfolio)
 
 graph.asset.allocation(portfolio=portfolio.riskfree$efficient_portfolio,sd=portfolio.riskfree$standarddev, 
                        mu=mu.new)
+                       
+# Using stacked barplot
+asset_free <- data.frame(mu.new,t(portfolio.riskfree$efficient_portfolio))
+library(reshape2)
+asset_free <- melt(asset_free, id = "mu.new")
+names(asset_free) <- c("mu","Stocks","Allocation")
+ggplot() + geom_bar(aes(y = Allocation, x = mu, fill = Stocks), data = asset_free, stat="identity") 
 ```
 
 #### numerical solution for our problem with risk free asset
