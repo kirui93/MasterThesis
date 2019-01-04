@@ -144,6 +144,9 @@ apply(X=Xi, MARGIN=2,FUN = mean)*100
 #Second moment : variance 
 (apply(X=Xi, MARGIN = 2, FUN = var)) #biased 
 (apply(X=Xi, MARGIN = 2, FUN = var) * (n-1)/n)*100 #unbiased
+#standard deviation
+(apply(X=Xi, MARGIN = 2, FUN = sd))*100 #biased 
+(apply(X=Xi, MARGIN = 2, FUN = sd) * (n-1)/n)*100 #unbiased
 ```
 
 ### Covariance matrix
@@ -243,6 +246,8 @@ matplot(mu,t(xm),type='l',col=1:j,lty=1:j,ylab="x*",main="Asset Allocation")
 legend("topright", stocks,col=1:j, lty=1:j,bty="n",lwd=1)
 # Or we can plot a stacked barplot which will appear a bit better than above
 library(reshape2)
+asset_alloc <- data.frame(mu,t(xm))
+names(asset_alloc) <- c("mu","DIS","BABA","JNJ","FB")
 asset_alloc <- melt(asset_alloc, id = "mu")
 names(asset_alloc) <- c("mu","Stocks","Allocation")
 ggplot() + geom_bar(aes(y = Allocation, x = mu, fill = Stocks), data = asset_alloc, stat="identity") 
