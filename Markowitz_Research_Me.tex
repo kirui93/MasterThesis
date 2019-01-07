@@ -1055,7 +1055,7 @@ portfolio returns at different levels
 ## 0.1526 2.9157 6.7967 4.8266 
 ## 
 ## Description:
-##  Mon Jan  7 18:21:42 2019 by user: kirui
+##  Mon Jan  7 18:53:48 2019 by user: kirui
 \end{verbatim}
 
 \begin{Shaded}
@@ -1088,7 +1088,7 @@ portfolio returns at different levels
 ## 0.3265 4.2364 9.8855 6.3517 
 ## 
 ## Description:
-##  Mon Jan  7 18:21:42 2019 by user: kirui
+##  Mon Jan  7 18:53:48 2019 by user: kirui
 \end{verbatim}
 
 \begin{Shaded}
@@ -1356,7 +1356,9 @@ allocation}\label{function-to-create-asset-allocation}
 \KeywordTok{library}\NormalTok{(reshape2)}
 \NormalTok{asset_free <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(asset_free, }\DataTypeTok{id =} \StringTok{"mu.new"}\NormalTok{)}
 \KeywordTok{names}\NormalTok{(asset_free) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"mu"}\NormalTok{,}\StringTok{"Stocks"}\NormalTok{,}\StringTok{"Allocation"}\NormalTok{)}
-\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ Allocation, }\DataTypeTok{x =}\NormalTok{ mu, }\DataTypeTok{fill =}\NormalTok{ Stocks), }\DataTypeTok{data =}\NormalTok{ asset_free, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ Allocation, }\DataTypeTok{x =}\NormalTok{ mu, }\DataTypeTok{fill =}\NormalTok{ Stocks), }\DataTypeTok{data =}\NormalTok{ asset_free, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_manual}\NormalTok{(}\StringTok{"Stocks"}\NormalTok{,}\DataTypeTok{values =}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"FB"}\NormalTok{=}\StringTok{"#0000FF"}\NormalTok{,}\StringTok{"JNJ"}\NormalTok{=}\StringTok{"#00FF00"}\NormalTok{,}\StringTok{"BABA"}\NormalTok{=}\StringTok{"#FF0000"}\NormalTok{,}\StringTok{"DIS"}\NormalTok{=}\StringTok{"#454545"}\NormalTok{,}\StringTok{"cash"}\NormalTok{=}\StringTok{"violet"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
