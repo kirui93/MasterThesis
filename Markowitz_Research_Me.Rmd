@@ -39,12 +39,7 @@ stocks = c("DIS","BABA","JNJ","FB")
 suppressMessages(getSymbols(stocks,from=begin, to = end))
 prices = na.omit(merge(Ad(DIS),Ad(BABA),Ad(JNJ),Ad(FB))) 
 names(prices) <- c("DIS","BABA","JNJ","FB")
-#plot dygraph from package dygraphs
-#dygraph(prices,main = "Prices of stocks",xlab = "Dates",ylab = "Prices")
-## Uncomment abive to see dygraphs
-# basic time series plot with range slider underneath
-#dygraph(prices) %>% dyRangeSelector()
-## uncomment above to see dygraphs
+
 #write the prices to a csv file in your computer
 write.zoo(prices,file = "Prices_of_4_stocks.csv", index.name = "Dates", sep = ",")
 prices_matrix <- as.matrix(prices)
@@ -63,6 +58,18 @@ ggplot(prices, aes(x = index(prices))) +
                                         "FB"="blue","JNJ"="#76176b"))
 head(prices,10)
 ```
+
+### Dygraphs
+
+```{r}
+#plot dygraph from package dygraphs
+#dygraph(prices,main = "Prices of stocks",xlab = "Dates",ylab = "Prices")
+## Uncomment abive to see dygraphs
+# basic time series plot with range slider underneath
+#dygraph(prices) %>% dyRangeSelector()
+## uncomment above to see dygraphs
+```
+
 
 ### Chart series for the stocks
 
