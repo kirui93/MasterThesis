@@ -259,7 +259,9 @@ asset_alloc <- data.frame(mu,t(xm))
 names(asset_alloc) <- c("mu","DIS","BABA","JNJ","FB")
 asset_alloc <- melt(asset_alloc, id = "mu")
 names(asset_alloc) <- c("mu","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = mu, fill = Stocks), data = asset_alloc, stat="identity") 
+ggplot() + geom_bar(aes(y = Allocation, x = mu, fill = Stocks), data = asset_alloc, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545")) 
 ```
 
 ### Combined asset allocation and standard deviation

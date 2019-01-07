@@ -175,10 +175,7 @@ plot}\label{obtaining-the-data-and-plot}
 \begin{Highlighting}[]
 \NormalTok{prices =}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(}\KeywordTok{merge}\NormalTok{(}\KeywordTok{Ad}\NormalTok{(DIS),}\KeywordTok{Ad}\NormalTok{(BABA),}\KeywordTok{Ad}\NormalTok{(JNJ),}\KeywordTok{Ad}\NormalTok{(FB))) }
 \KeywordTok{names}\NormalTok{(prices) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"DIS"}\NormalTok{,}\StringTok{"BABA"}\NormalTok{,}\StringTok{"JNJ"}\NormalTok{,}\StringTok{"FB"}\NormalTok{)}
-\CommentTok{#plot dygraph from package dygraphs}
-\CommentTok{#dygraph(prices,main = "Prices of stocks",xlab = "Dates",ylab = "Prices")}
-\CommentTok{# basic time series plot with range slider underneath}
-\CommentTok{#dygraph(prices) %>% dyRangeSelector()}
+
 \CommentTok{#write the prices to a csv file in your computer}
 \KeywordTok{write.zoo}\NormalTok{(prices,}\DataTypeTok{file =} \StringTok{"Prices_of_4_stocks.csv"}\NormalTok{, }\DataTypeTok{index.name =} \StringTok{"Dates"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{","}\NormalTok{)}
 \NormalTok{prices_matrix <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(prices)}
@@ -220,6 +217,19 @@ plot}\label{obtaining-the-data-and-plot}
 ## 2014-10-02 80.85040 87.06 92.47746 77.08
 \end{verbatim}
 
+\subsubsection{Dygraphs}\label{dygraphs}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#plot dygraph from package dygraphs}
+\CommentTok{#dygraph(prices,main = "Prices of stocks",xlab = "Dates",ylab = "Prices")}
+\NormalTok{## Uncomment abive to see dygraphs}
+\CommentTok{# basic time series plot with range slider underneath}
+\CommentTok{#dygraph(prices) %>% dyRangeSelector()}
+\NormalTok{## uncomment above to see dygraphs}
+\end{Highlighting}
+\end{Shaded}
+
 \subsubsection{Chart series for the
 stocks}\label{chart-series-for-the-stocks}
 
@@ -229,7 +239,7 @@ stocks}\label{chart-series-for-the-stocks}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-3-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-4-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -237,7 +247,7 @@ stocks}\label{chart-series-for-the-stocks}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-3-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-4-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -245,7 +255,7 @@ stocks}\label{chart-series-for-the-stocks}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-3-3.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-4-3.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -253,7 +263,7 @@ stocks}\label{chart-series-for-the-stocks}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-3-4.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-4-4.pdf}
 
 \subsubsection{Corrplot for 2014-2016}\label{corrplot-for-2014-2016}
 
@@ -295,7 +305,7 @@ stocks}\label{chart-series-for-the-stocks}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-5-1.pdf}
 
 \subsubsection{Corrplot for 2016-2018}\label{corrplot-for-2016-2018}
 
@@ -337,7 +347,7 @@ stocks}\label{chart-series-for-the-stocks}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-5-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-6-1.pdf}
 
 \subsubsection{Matrix plot for scaled prices for the
 data}\label{matrix-plot-for-scaled-prices-for-the-data}
@@ -357,7 +367,7 @@ data}\label{matrix-plot-for-scaled-prices-for-the-data}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-7-1.pdf}
 
 \subsubsection{Matrix of annualized returns,skewness and
 kurtosis}\label{matrix-of-annualized-returnsskewness-and-kurtosis}
@@ -564,7 +574,7 @@ assets}\label{correlation-of-the-assets}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-11-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-12-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -573,7 +583,7 @@ assets}\label{correlation-of-the-assets}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-11-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-12-2.pdf}
 
 \subsubsection{Inverse of the covariance
 matrix}\label{inverse-of-the-covariance-matrix}
@@ -686,7 +696,7 @@ standard deviation and returns for our data in the following figure:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-15-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-16-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -696,7 +706,7 @@ standard deviation and returns for our data in the following figure:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-15-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-16-2.pdf}
 
 The portfolio with the smallest variance from our combinations is given
 by \(\mu = \frac{b}{c} = 0.1604767 = 16.05\%\) which is clear from the
@@ -712,7 +722,7 @@ diagram and the corresponding standard deviation is given by
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-16-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-17-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -722,11 +732,13 @@ diagram and the corresponding standard deviation is given by
 \KeywordTok{names}\NormalTok{(asset_alloc) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"mu"}\NormalTok{,}\StringTok{"DIS"}\NormalTok{,}\StringTok{"BABA"}\NormalTok{,}\StringTok{"JNJ"}\NormalTok{,}\StringTok{"FB"}\NormalTok{)}
 \NormalTok{asset_alloc <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(asset_alloc, }\DataTypeTok{id =} \StringTok{"mu"}\NormalTok{)}
 \KeywordTok{names}\NormalTok{(asset_alloc) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"mu"}\NormalTok{,}\StringTok{"Stocks"}\NormalTok{,}\StringTok{"Allocation"}\NormalTok{)}
-\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ Allocation, }\DataTypeTok{x =}\NormalTok{ mu, }\DataTypeTok{fill =}\NormalTok{ Stocks), }\DataTypeTok{data =}\NormalTok{ asset_alloc, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ Allocation, }\DataTypeTok{x =}\NormalTok{ mu, }\DataTypeTok{fill =}\NormalTok{ Stocks), }\DataTypeTok{data =}\NormalTok{ asset_alloc, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_manual}\NormalTok{(}\StringTok{"Stocks"}\NormalTok{,}\DataTypeTok{values =}
+                      \KeywordTok{c}\NormalTok{(}\StringTok{"FB"}\NormalTok{=}\StringTok{"#0000FF"}\NormalTok{,}\StringTok{"JNJ"}\NormalTok{=}\StringTok{"#00FF00"}\NormalTok{,}\StringTok{"BABA"}\NormalTok{=}\StringTok{"#FF0000"}\NormalTok{,}\StringTok{"DIS"}\NormalTok{=}\StringTok{"#454545"}\NormalTok{)) }
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-16-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-17-2.pdf}
 
 \subsubsection{Combined asset allocation and standard
 deviation}\label{combined-asset-allocation-and-standard-deviation}
@@ -743,7 +755,7 @@ deviation}\label{combined-asset-allocation-and-standard-deviation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-18-1.pdf}
 
 \subsection{PART 2}\label{part-2}
 
@@ -822,7 +834,7 @@ series object.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-18-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -831,7 +843,7 @@ series object.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-18-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -905,7 +917,7 @@ series object.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-18-3.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-3.pdf}
 
 \subsubsection{Portfolio frontier
 calculation}\label{portfolio-frontier-calculation}
@@ -933,7 +945,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -941,7 +953,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -949,7 +961,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-3.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-3.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -987,7 +999,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-4.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-4.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -998,7 +1010,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-5.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-5.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1009,7 +1021,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-6.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-6.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1043,7 +1055,7 @@ portfolio returns at different levels
 ## 0.1526 2.9157 6.7967 4.8266 
 ## 
 ## Description:
-##  Mon Jan  7 11:49:16 2019 by user: kirui
+##  Mon Jan  7 18:21:42 2019 by user: kirui
 \end{verbatim}
 
 \begin{Shaded}
@@ -1076,7 +1088,7 @@ portfolio returns at different levels
 ## 0.3265 4.2364 9.8855 6.3517 
 ## 
 ## Description:
-##  Mon Jan  7 11:49:16 2019 by user: kirui
+##  Mon Jan  7 18:21:42 2019 by user: kirui
 \end{verbatim}
 
 \begin{Shaded}
@@ -1096,7 +1108,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-7.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-7.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1112,7 +1124,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-8.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-8.pdf}
 
 \subsubsection{Note:}\label{note}
 
@@ -1199,7 +1211,7 @@ list of tickers.
 ##   Use c() or as.vector() instead.
 \end{verbatim}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-21-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1209,7 +1221,7 @@ list of tickers.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-21-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1243,7 +1255,7 @@ list of tickers.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-3.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-21-3.pdf}
 
 \subsection{Markowitz model with a risk free
 asset}\label{markowitz-model-with-a-risk-free-asset}
@@ -1335,7 +1347,7 @@ allocation}\label{function-to-create-asset-allocation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1348,7 +1360,7 @@ allocation}\label{function-to-create-asset-allocation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-22-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-2.pdf}
 
 \paragraph{numerical solution for our problem with risk free
 asset}\label{numerical-solution-for-our-problem-with-risk-free-asset}
