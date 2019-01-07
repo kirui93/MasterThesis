@@ -40,9 +40,11 @@ suppressMessages(getSymbols(stocks,from=begin, to = end))
 prices = na.omit(merge(Ad(DIS),Ad(BABA),Ad(JNJ),Ad(FB))) 
 names(prices) <- c("DIS","BABA","JNJ","FB")
 #plot dygraph from package dygraphs
-dygraph(prices,main = "Prices of stocks",xlab = "Dates",ylab = "Prices")
+#dygraph(prices,main = "Prices of stocks",xlab = "Dates",ylab = "Prices")
+## Uncomment abive to see dygraphs
 # basic time series plot with range slider underneath
-dygraph(prices) %>% dyRangeSelector()
+#dygraph(prices) %>% dyRangeSelector()
+## uncomment above to see dygraphs
 #write the prices to a csv file in your computer
 write.zoo(prices,file = "Prices_of_4_stocks.csv", index.name = "Dates", sep = ",")
 prices_matrix <- as.matrix(prices)
@@ -307,7 +309,7 @@ colnames(portfolioReturns) <- tickers
 #Plot of the returns developments of the above data
 ggplot(portfolioReturns, aes(x = index(portfolioReturns))) +
   geom_line(aes(y = portfolioReturns$DIS,color = "DIS")) + 
-  ggtitle("Historical portfolio returns Developments of the stocks") +
+  ggtitle("Historical portfolio returns of the stocks") +
   geom_line(aes(y = portfolioReturns$BABA, color = "BABA")) + 
   geom_line(aes(y = portfolioReturns$JNJ, color = "JNJ")) +
   geom_line(aes(y = portfolioReturns$FB, color = "FB")) +
@@ -316,7 +318,8 @@ ggplot(portfolioReturns, aes(x = index(portfolioReturns))) +
   scale_y_continuous(expand = c(0,0)) +
   scale_colour_manual("Stocks",values=c("DIS"="#FF0000","BABA"="#00FF00",
                                         "JNJ"="#0000FF","FB"="#454545"))
-plot.zoo(portfolioReturns,col = 1:4)
+plot.zoo(portfolioReturns,col = c("DIS"="#FF0000","BABA"="#00FF00",
+                                        "FB"="#0000FF","JNJ"="#454545"))
 portfolioReturns <- as.timeSeries(portfolioReturns)
 #Checking on the dimension of the portfolio prices
 dim(portfolioPrices)
@@ -326,7 +329,7 @@ head(portfolioReturns)
 #Plot of the price developments of the above data
 ggplot(portfolioPrices, aes(x = index(portfolioPrices))) +
   geom_line(aes(y = portfolioPrices$DIS,color = "DIS")) + 
-  ggtitle("Historical Price Developments of the stocks") +
+  ggtitle("Historical Portfolio Prices of the stocks") +
   geom_line(aes(y = portfolioPrices$BABA, color = "BABA")) + 
   geom_line(aes(y = portfolioPrices$JNJ, color = "JNJ")) +
   geom_line(aes(y = portfolioPrices$FB, color = "FB")) +
@@ -334,7 +337,7 @@ ggplot(portfolioPrices, aes(x = index(portfolioPrices))) +
   theme(plot.title = element_text(hjust = 0.5), panel.border = element_blank()) +
   scale_y_continuous(expand = c(0,0)) +
   scale_colour_manual("Stocks",values=c("DIS"="#FF0000","BABA"="#00FF00",
-                                        "JNJ"="#0000FF","FB"="#454545"))
+                                        "JNJ"="#454545","FB"="#0000FF"))
 ```
 
 ### Portfolio frontier calculation
