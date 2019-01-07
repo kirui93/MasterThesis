@@ -186,7 +186,9 @@ data1 <- result1
 names(data1) <- c("alpha","DIS","BABA","JNJ","FB")
 mdata <- melt(data1, id=c("alpha"))
 names(mdata) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata, stat="identity") 
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545"))
 ```
 
 ### With gamma=0
@@ -280,7 +282,9 @@ data3 <- result3
 names(data3) <- c("alpha","DIS","BABA","JNJ","FB")
 mdata3 <- melt(data3, id=c("alpha"))
 names(mdata3) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata3, stat="identity") 
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata3, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545")) 
 ```
 
 #### Plot of alpha vs q for gamma = 0.3
@@ -334,7 +338,9 @@ data5 <- result5
 names(data5) <- c("alpha","DIS","BABA","JNJ","FB")
 mdata5 <- melt(data5, id=c("alpha"))
 names(mdata5) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata5, stat="identity")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata5, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545"))
 ```
 
 #### Plot of alpha vs q for gamma = 0.5
@@ -371,7 +377,7 @@ for (alp in alpha){
 }
 ```
 
-#### Asset allocation for $\gamm = 0.7$
+#### Asset allocation for $\gamma = 0.7$
 
 ```{r}
 result7 <-  data.frame(alpha,dis_result7,baba_result7,jnj_result7,fb_result7)
@@ -388,7 +394,9 @@ data7 <- result7
 names(data7) <- c("alpha","DIS","BABA","JNJ","FB")
 mdata7 <- melt(data7, id=c("alpha"))
 names(mdata7) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata7, stat="identity")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata7, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545"))
 ```
 
 #### Plot of alpha vs q for gamma = 0.7
@@ -442,7 +450,9 @@ data9 <- result9
 names(data9) <- c("alpha","DIS","BABA","JNJ","FB")
 mdata9 <- melt(data9, id=c("alpha"))
 names(mdata9) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata9, stat="identity")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata9, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545"))
 ```
 
 #### Plot of alpha vs q(value at risk) for gamma = 0.9
@@ -519,7 +529,9 @@ data1 <- resultfree1
 names(data1) <- c("alpha","DIS","BABA","JNJ","FB","BOND")
 mdata1 <- melt(data1, id=c("alpha"))
 names(mdata1) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata1, stat="identity") 
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata1, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545","BOND" = "violet"))
 ```
 
 ## Solving and asset allocation for $\gamma$free = 0.3
@@ -567,7 +579,9 @@ data3 <- resultfree3
 names(data3) <- c("alpha","DIS","BABA","JNJ","FB","BOND")
 mdata3 <- melt(data3, id=c("alpha"))
 names(mdata3) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata3, stat="identity")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata3, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545","BOND" = "violet"))
 ```
 
 
@@ -615,7 +629,9 @@ data5 <- resultfree5
 names(data5) <- c("alpha","DIS","BABA","JNJ","FB","BOND")
 mdata5 <- melt(data5, id=c("alpha"))
 names(mdata5) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata5, stat="identity")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata5, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545","BOND" = "violet"))
 ```
 
 
@@ -663,7 +679,9 @@ data7 <- resultfree7
 names(data7) <- c("alpha","DIS","BABA","JNJ","FB","BOND")
 mdata7 <- melt(data7, id=c("alpha"))
 names(mdata7) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata7, stat="identity")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata7, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545","BOND" = "violet"))
 ```
 
 ## Solving and asset allocation for $\gamma$free = 0.9
@@ -710,7 +728,9 @@ data9 <- resultfree9
 names(data9) <- c("alpha","DIS","BABA","JNJ","FB","BOND")
 mdata9 <- melt(data9, id=c("alpha"))
 names(mdata9) <- c("Alpha","Stocks","Allocation")
-ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata9, stat="identity")
+ggplot() + geom_bar(aes(y = Allocation, x = Alpha, fill = Stocks), data = mdata9, stat="identity")+
+  scale_fill_manual("Stocks",values =
+                      c("FB"="#0000FF","JNJ"="#00FF00","BABA"="#FF0000","DIS"="#454545","BOND" = "violet"))
 ```
 
 
