@@ -647,7 +647,7 @@ weights onto this stock. In this case, the stock itself is FB.
 \end{Shaded}
 
 \paragraph{\texorpdfstring{Asset allocation for
-\(\gamm = 0.7\)}{Asset allocation for \textbackslash{}gamm = 0.7}}\label{asset-allocation-for-gamm-0.7}
+\(\gamma = 0.7\)}{Asset allocation for \textbackslash{}gamma = 0.7}}\label{asset-allocation-for-gamma-0.7}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1150,6 +1150,22 @@ alpha.
 \end{Shaded}
 
 \includegraphics{Integrated_Management_Formulation_Model_files/figure-latex/unnamed-chunk-28-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{var <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"numeric"}\NormalTok{)}
+\NormalTok{avar <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"numeric"}\NormalTok{)}
+\NormalTok{alpha <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{0.0}\NormalTok{,}\FloatTok{0.05}\NormalTok{,}\FloatTok{0.1}\NormalTok{,}\FloatTok{0.2}\NormalTok{,}\FloatTok{0.3}\NormalTok{,}\FloatTok{0.4}\NormalTok{,}\FloatTok{0.5}\NormalTok{,}\FloatTok{0.6}\NormalTok{,}\FloatTok{0.7}\NormalTok{,}\FloatTok{0.8}\NormalTok{,}\FloatTok{0.90}\NormalTok{,}\FloatTok{0.95}\NormalTok{,}\FloatTok{0.99}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ (alp }\ControlFlowTok{in}\NormalTok{ alpha)\{}
+\NormalTok{  var <-}\StringTok{ }\KeywordTok{append}\NormalTok{(var,}\KeywordTok{qnorm}\NormalTok{(alp,}\DataTypeTok{mean =}\NormalTok{ mu, }\DataTypeTok{sd =}\NormalTok{ sigma))}
+\NormalTok{  avar <-}\StringTok{ }\KeywordTok{append}\NormalTok{(avar,}\KeywordTok{ESnorm}\NormalTok{(alp,}\DataTypeTok{mu =}\NormalTok{ mu , }\DataTypeTok{sd =}\NormalTok{ sigma))}
+\NormalTok{\}}
+\KeywordTok{plot}\NormalTok{(alpha,var,}\DataTypeTok{type=}\StringTok{"l"}\NormalTok{, }\DataTypeTok{col=}\StringTok{"green"}\NormalTok{, }\DataTypeTok{xlab =} \KeywordTok{expression}\NormalTok{(alpha), }\DataTypeTok{ylab =} \StringTok{"V@R and AV@R"}\NormalTok{,}\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(alpha,avar,}\DataTypeTok{col =} \StringTok{"red"}\NormalTok{,}\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Integrated_Management_Formulation_Model_files/figure-latex/unnamed-chunk-28-2.pdf}
 
 
 \end{document}

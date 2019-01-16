@@ -757,4 +757,13 @@ abline(v = VaR99, col = "red")
 text(1.8,0.0, "V@R0.99%", col = "red") 
 abline(v = ES99, col = "blue")
 text(3.5,0.0, "AV@R0.99%", col = "blue") 
+var <- vector(mode = "numeric")
+avar <- vector(mode = "numeric")
+alpha <- c(0.0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.90,0.95,0.99)
+for (alp in alpha){
+  var <- append(var,qnorm(alp,mean = mu, sd = sigma))
+  avar <- append(avar,ESnorm(alp,mu = mu , sd = sigma))
+}
+plot(alpha,var,type="l", col="green", xlab = expression(alpha), ylab = "V@R and AV@R",lwd = 2)
+lines(alpha,avar,col = "red",lwd = 2)
 ```
