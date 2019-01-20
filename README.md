@@ -22,5 +22,9 @@ The Jupyter notebook is for implementation of the Entropic Value-at-Risk based m
 
 The results and discussions of the models are asmcontained in Chapter 6 of the thesis. Not all the results from the models are discussed but the most important results in the thesis are included. 
 
+#### CSV files
 
+The CSV files in the repository are automatically created and saved by the programs themselves. So no need to worry!
+
+##### HAPPY CODING!!!!!
 
