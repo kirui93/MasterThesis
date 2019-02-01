@@ -473,6 +473,25 @@ unbiased)}\label{expected-annualied-returns-and-variancebiased-and-unbiased}
 ## 426.9527 709.7500 327.6589 557.7090
 \end{verbatim}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Alternative calculation for mean and variance}
+\NormalTok{Return <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(Xi)}
+\NormalTok{Mean <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(Return,mean)}
+\NormalTok{Variance <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(Return, var)}
+\NormalTok{SD <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(Return,sd)}
+\KeywordTok{cbind}\NormalTok{(Mean,Variance,SD)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           Mean Variance       SD
+## DIS  0.1005307 18.27308 4.274703
+## BABA 0.2686097 50.49671 7.106103
+## JNJ  0.1532568 10.76208 3.280561
+## FB   0.3612616 31.17938 5.583850
+\end{verbatim}
+
 \subsubsection{Covariance matrix}\label{covariance-matrix}
 
 From below, we should note that the covariance matrix is symmetric and
@@ -574,7 +593,7 @@ assets}\label{correlation-of-the-assets}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-12-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-13-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -583,7 +602,7 @@ assets}\label{correlation-of-the-assets}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-12-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-13-2.pdf}
 
 \subsubsection{Inverse of the covariance
 matrix}\label{inverse-of-the-covariance-matrix}
@@ -696,7 +715,7 @@ standard deviation and returns for our data in the following figure:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-16-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-17-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -706,7 +725,7 @@ standard deviation and returns for our data in the following figure:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-16-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-17-2.pdf}
 
 The portfolio with the smallest variance from our combinations is given
 by \(\mu = \frac{b}{c} = 0.1604767 = 16.05\%\) which is clear from the
@@ -722,7 +741,7 @@ diagram and the corresponding standard deviation is given by
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-18-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -738,7 +757,7 @@ diagram and the corresponding standard deviation is given by
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-17-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-18-2.pdf}
 
 \subsubsection{Combined asset allocation and standard
 deviation}\label{combined-asset-allocation-and-standard-deviation}
@@ -755,7 +774,119 @@ deviation}\label{combined-asset-allocation-and-standard-deviation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-18-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eff.frontier <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{ (returns, }\DataTypeTok{short=}\StringTok{"no"}\NormalTok{, }\DataTypeTok{max.allocation=}\OtherTok{NULL}\NormalTok{, }\DataTypeTok{risk.premium.up=}\NormalTok{.}\DecValTok{5}\NormalTok{, }\DataTypeTok{risk.increment=}\NormalTok{.}\DecValTok{005}\NormalTok{)\{}
+\NormalTok{        covariance <-}\StringTok{ }\KeywordTok{cov}\NormalTok{(returns)}
+        \KeywordTok{print}\NormalTok{(covariance)}
+\NormalTok{        n <-}\StringTok{ }\KeywordTok{ncol}\NormalTok{(covariance)}
+ 
+\CommentTok{# Create initial Amat and bvec assuming only equality constraint (short-selling is allowed, no allocation constraints)}
+\NormalTok{Amat <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{ (}\DecValTok{1}\NormalTok{, }\DataTypeTok{nrow=}\NormalTok{n)}
+\NormalTok{bvec <-}\StringTok{ }\DecValTok{1}
+\NormalTok{meq <-}\StringTok{ }\DecValTok{1}
+ 
+\CommentTok{# Then modify the Amat and bvec if short-selling is prohibited}
+\ControlFlowTok{if}\NormalTok{(short}\OperatorTok{==}\StringTok{"no"}\NormalTok{)\{}
+\NormalTok{Amat <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{diag}\NormalTok{(n))}
+\NormalTok{bvec <-}\StringTok{ }\KeywordTok{c}\NormalTok{(bvec, }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, n))}
+\NormalTok{\}}
+\CommentTok{# And modify Amat and bvec if a max allocation (concentration) is specified}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{is.null}\NormalTok{(max.allocation))\{}
+\ControlFlowTok{if}\NormalTok{(max.allocation }\OperatorTok{>}\StringTok{ }\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{max.allocation }\OperatorTok{<}\DecValTok{0}\NormalTok{)\{}
+\KeywordTok{stop}\NormalTok{(}\StringTok{"max.allocation must be greater than 0 and less than 1"}\NormalTok{)}
+\NormalTok{\}}
+\ControlFlowTok{if}\NormalTok{(max.allocation }\OperatorTok{*}\StringTok{ }\NormalTok{n }\OperatorTok{<}\StringTok{ }\DecValTok{1}\NormalTok{)\{}
+\KeywordTok{stop}\NormalTok{(}\StringTok{"Need to set max.allocation higher; not enough assets to add to 1"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{Amat <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(Amat, }\OperatorTok{-}\KeywordTok{diag}\NormalTok{(n))}
+\NormalTok{bvec <-}\StringTok{ }\KeywordTok{c}\NormalTok{(bvec, }\KeywordTok{rep}\NormalTok{(}\OperatorTok{-}\NormalTok{max.allocation, n))}
+\NormalTok{\}}
+ 
+\CommentTok{# Calculate the number of loops based on how high to vary the risk premium and by what increment}
+\NormalTok{loops <-}\StringTok{ }\NormalTok{risk.premium.up }\OperatorTok{/}\StringTok{ }\NormalTok{risk.increment }\OperatorTok{+}\StringTok{ }\DecValTok{1}
+\NormalTok{loop <-}\StringTok{ }\DecValTok{1}
+ 
+\CommentTok{# Initialize a matrix to contain allocation and statistics}
+\CommentTok{# This is not necessary, but speeds up processing and uses less memory}
+\NormalTok{eff <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{nrow=}\NormalTok{loops, }\DataTypeTok{ncol=}\NormalTok{n}\OperatorTok{+}\DecValTok{3}\NormalTok{)}
+\CommentTok{# Now I need to give the matrix column names}
+\KeywordTok{colnames}\NormalTok{(eff) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{colnames}\NormalTok{(returns), }\StringTok{"Std.Dev"}\NormalTok{, }\StringTok{"Exp.Return"}\NormalTok{, }\StringTok{"sharpe"}\NormalTok{)}
+ 
+\CommentTok{# Loop through the quadratic program solver}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\DecValTok{0}\NormalTok{, }\DataTypeTok{to=}\NormalTok{risk.premium.up, }\DataTypeTok{by=}\NormalTok{risk.increment))\{}
+\NormalTok{dvec <-}\StringTok{ }\KeywordTok{colMeans}\NormalTok{(returns) }\OperatorTok{*}\StringTok{ }\NormalTok{i }\CommentTok{# This moves the solution up along the efficient frontier}
+\NormalTok{sol <-}\StringTok{ }\KeywordTok{solve.QP}\NormalTok{(covariance, }\DataTypeTok{dvec=}\NormalTok{dvec, }\DataTypeTok{Amat=}\NormalTok{Amat, }\DataTypeTok{bvec=}\NormalTok{bvec, }\DataTypeTok{meq=}\NormalTok{meq)}
+\NormalTok{eff[loop,}\StringTok{"Std.Dev"}\NormalTok{] <-}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{sum}\NormalTok{(sol}\OperatorTok{$}\NormalTok{solution }\OperatorTok{*}\KeywordTok{colSums}\NormalTok{((covariance }\OperatorTok{*}\StringTok{ }\NormalTok{sol}\OperatorTok{$}\NormalTok{solution))))}
+\NormalTok{eff[loop,}\StringTok{"Exp.Return"}\NormalTok{] <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(sol}\OperatorTok{$}\NormalTok{solution }\OperatorTok{%*%}\StringTok{ }\KeywordTok{colMeans}\NormalTok{(returns))}
+\NormalTok{eff[loop,}\StringTok{"sharpe"}\NormalTok{] <-}\StringTok{ }\NormalTok{eff[loop,}\StringTok{"Exp.Return"}\NormalTok{] }\OperatorTok{/}\StringTok{ }\NormalTok{eff[loop,}\StringTok{"Std.Dev"}\NormalTok{]}
+\NormalTok{eff[loop,}\DecValTok{1}\OperatorTok{:}\NormalTok{n] <-}\StringTok{ }\NormalTok{sol}\OperatorTok{$}\NormalTok{solution}
+\NormalTok{loop <-}\StringTok{ }\NormalTok{loop}\OperatorTok{+}\DecValTok{1}
+\NormalTok{\}}
+ 
+\KeywordTok{return}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(eff))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Mean Variance
+Optimization}\label{mean-variance-optimization}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(quadprog)}
+\NormalTok{eff <-}\StringTok{ }\KeywordTok{eff.frontier}\NormalTok{(}\DataTypeTok{returns=}\NormalTok{Return, }\DataTypeTok{short=}\StringTok{"no"}\NormalTok{, }\DataTypeTok{max.allocation=}\OtherTok{NULL}\NormalTok{, }\DataTypeTok{risk.premium.up=}\NormalTok{.}\DecValTok{5}\NormalTok{, }\DataTypeTok{risk.increment=}\NormalTok{.}\DecValTok{001}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            DIS      BABA       JNJ        FB
+## DIS  18.273082  5.788963  4.657648  6.717097
+## BABA  5.788963 50.496707  5.157152 13.846795
+## JNJ   4.657648  5.157152 10.762081  6.118848
+## FB    6.717097 13.846795  6.118848 31.179377
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eff.optimal.point <-}\StringTok{ }\NormalTok{eff[eff}\OperatorTok{$}\NormalTok{sharpe}\OperatorTok{==}\KeywordTok{max}\NormalTok{(eff}\OperatorTok{$}\NormalTok{sharpe),]}\OperatorTok{*}\DecValTok{100}
+\NormalTok{eff.optimal.point}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          DIS     BABA      JNJ       FB Std.Dev Exp.Return   sharpe
+## 501 26.33781 5.671654 60.49754 7.492994 291.421   16.14981 5.541745
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eff.optimal.point <-}\StringTok{ }\NormalTok{eff[eff}\OperatorTok{$}\NormalTok{sharpe}\OperatorTok{==}\KeywordTok{max}\NormalTok{(eff}\OperatorTok{$}\NormalTok{sharpe),]}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\CommentTok{# Color Scheme}
+\NormalTok{ ealred  <-}\StringTok{ "#7D110C"}
+\NormalTok{ ealtan  <-}\StringTok{ "#CDC4B6"}
+\NormalTok{ eallighttan <-}\StringTok{ "#F7F6F0"}
+\NormalTok{ ealdark  <-}\StringTok{ "#423C30"}
+\KeywordTok{ggplot}\NormalTok{(eff, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Std.Dev, }\DataTypeTok{y=}\NormalTok{Exp.Return)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{alpha=}\NormalTok{.}\DecValTok{1}\NormalTok{, }\DataTypeTok{color=}\NormalTok{ealdark) }\OperatorTok{+}
+\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data=}\NormalTok{eff.optimal.point, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Std.Dev, }\DataTypeTok{y=}\NormalTok{Exp.Return, }\DataTypeTok{label=}\NormalTok{sharpe), }\DataTypeTok{color=}\NormalTok{ealred, }\DataTypeTok{size=}\DecValTok{5}\NormalTok{) }\OperatorTok{+}
+\StringTok{ }\KeywordTok{annotate}\NormalTok{(}\DataTypeTok{geom=}\StringTok{"text"}\NormalTok{, }\DataTypeTok{x=}\NormalTok{eff.optimal.point}\OperatorTok{$}\NormalTok{Std.Dev, }\DataTypeTok{y=}\NormalTok{eff.optimal.point}\OperatorTok{$}\NormalTok{Exp.Return,}
+ \DataTypeTok{label=}\KeywordTok{paste}\NormalTok{(}\StringTok{"Risk: "}\NormalTok{, }\KeywordTok{round}\NormalTok{(eff.optimal.point}\OperatorTok{$}\NormalTok{Std.Dev}\OperatorTok{*}\DecValTok{100}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{3}\NormalTok{),}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{Return: "}\NormalTok{,}
+ \KeywordTok{round}\NormalTok{(eff.optimal.point}\OperatorTok{$}\NormalTok{Exp.Return}\OperatorTok{*}\DecValTok{100}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{),}\StringTok{"%}\CharTok{\textbackslash{}n}\StringTok{Sharpe: "}\NormalTok{,}
+ \KeywordTok{round}\NormalTok{(eff.optimal.point}\OperatorTok{$}\NormalTok{sharpe}\OperatorTok{*}\DecValTok{100}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{2}\NormalTok{), }\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{), }\DataTypeTok{hjust=}\DecValTok{0}\NormalTok{, }\DataTypeTok{vjust=}\FloatTok{1.2}\NormalTok{) }\OperatorTok{+}
+\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Efficient Frontier}\CharTok{\textbackslash{}n}\StringTok{and Optimal Portfolio"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Risk (standard deviation of portfolio variance)"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Return"}\NormalTok{) }\OperatorTok{+}
+\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background=}\KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{eallighttan), }\DataTypeTok{text=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color=}\NormalTok{ealdark),}
+ \DataTypeTok{plot.title=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{24}\NormalTok{, }\DataTypeTok{color=}\NormalTok{ealred, }\DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Ignoring unknown aesthetics: label
+\end{verbatim}
+
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-21-1.pdf}
 
 \subsection{PART 2}\label{part-2}
 
@@ -834,7 +965,7 @@ series object.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-22-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -843,7 +974,7 @@ series object.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-22-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -917,7 +1048,7 @@ series object.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-19-3.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-22-3.pdf}
 
 \subsubsection{Portfolio frontier
 calculation}\label{portfolio-frontier-calculation}
@@ -945,7 +1076,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -953,7 +1084,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -961,7 +1092,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-3.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-3.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -999,7 +1130,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-4.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-4.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1010,7 +1141,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-5.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-5.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1021,7 +1152,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-6.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-6.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1055,7 +1186,7 @@ portfolio returns at different levels
 ## 0.1526 2.9157 6.7967 4.8266 
 ## 
 ## Description:
-##  Mon Jan  7 18:53:48 2019 by user: kirui
+##  Thu Jan 24 09:38:05 2019 by user: kirui
 \end{verbatim}
 
 \begin{Shaded}
@@ -1088,7 +1219,7 @@ portfolio returns at different levels
 ## 0.3265 4.2364 9.8855 6.3517 
 ## 
 ## Description:
-##  Mon Jan  7 18:53:48 2019 by user: kirui
+##  Thu Jan 24 09:38:05 2019 by user: kirui
 \end{verbatim}
 
 \begin{Shaded}
@@ -1108,7 +1239,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-7.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-7.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1124,7 +1255,7 @@ portfolio returns at different levels
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-20-8.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-8.pdf}
 
 \subsubsection{Note:}\label{note}
 
@@ -1211,7 +1342,7 @@ list of tickers.
 ##   Use c() or as.vector() instead.
 \end{verbatim}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-21-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-24-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1221,7 +1352,7 @@ list of tickers.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-21-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-24-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1255,7 +1386,7 @@ list of tickers.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-21-3.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-24-3.pdf}
 
 \subsection{Markowitz model with a risk free
 asset}\label{markowitz-model-with-a-risk-free-asset}
@@ -1347,7 +1478,7 @@ allocation}\label{function-to-create-asset-allocation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-1.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-26-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1362,7 +1493,7 @@ allocation}\label{function-to-create-asset-allocation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-23-2.pdf}
+\includegraphics{Markowitz_Research_Me_files/figure-latex/unnamed-chunk-26-2.pdf}
 
 \paragraph{numerical solution for our problem with risk free
 asset}\label{numerical-solution-for-our-problem-with-risk-free-asset}

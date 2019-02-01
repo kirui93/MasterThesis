@@ -44,7 +44,7 @@ suppressMessages(library(ggplot2))
 The data to be obtained is in the range of 2014 and 2018 considering the stocks DIS, BABA, JNJ and FB. We only want the adjusted closing prices of our stocks and so those are the ones we consider without missing values. Using the function ROC from the package TTR, we calculate the returns of our data and then annualize the results. We consider equal probabilities for all the trading days.
 
 ```{r}
-begin <- "2014-01-01" #first day of my trading perios
+begin <- "2014-01-01" #first day of my trading periods
 end <- "2018-01-01" #last day of my trading period
 stocks <- c("DIS","BABA","JNJ","FB","BOND") #stocks in my portfolio
 #BOND is the risk less asset
